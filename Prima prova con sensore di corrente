@@ -1,0 +1,21 @@
+#include "EmonLib.h" //libreria contenente le funzioni che ci permettono di interagire con il sensore
+
+//Definiamo le costanti globali caratterizzanti il sensore, che utilizzeremo per calibrarlo e per calcolare il valore della corrente
+const int tensione=220; //tensione della rete domestica
+const int pin_sensore=2; //pin impostato su A2
+const float calibrazione=29; //valore di default
+
+float Irms=0; //valore della corrente inizializzato a 0
+
+EnergyMonitor emon1; //a questo punto occorre creare un'istanza di Emon
+
+void setup() {
+  Serial.begin(9600); //Apertura comunicazione seriale (vedi SoftwareSerial Library)
+  emon1.current(pin_sensore, calibrazione);
+}
+
+void loop() {
+  Irms=emon1.calcIrms(1480); //calcolo della corrente (1480 corrisponde al numero di campioni)
+  Serial.println(Irms);
+  delay(1000);
+}
